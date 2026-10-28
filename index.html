@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TSP Messku - Pelaporan Kerusakan & Potensi Bahaya</title>
+  <style>
+    :root{
+      --bg:#f4f7fb;
+      --card:#ffffff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --primary:#2563eb;
+      --primary-dark:#1d4ed8;
+      --danger:#dc2626;
+      --success:#16a34a;
+      --warning:#d97706;
+      --border:#e5e7eb;
+      --shadow:0 10px 30px rgba(15,23,42,.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial,Helvetica,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+    header{
+      background:linear-gradient(135deg,#0f172a,#2563eb);
+      color:#fff;
+      padding:22px 16px;
+      box-shadow:var(--shadow);
+    }
+    .wrap{max-width:1100px;margin:auto;position:relative}
+    .brand{max-width:calc(100% - 95px);overflow:hidden;font-size:26px;font-weight:800;letter-spacing:.3px}
+    .brand-track{display:inline-block;white-space:nowrap;padding-left:100%;animation:brandMarquee 10s linear infinite}
+    .sub{margin-top:6px;opacity:.88;font-size:14px}
+    @keyframes brandMarquee{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
+    nav{
+      background:#fff;
+      border-bottom:1px solid var(--border);
+      position:sticky;
+      top:0;
+      z-index:20;
+    }
+    .nav-inner{
+      max-width:1100px;
+      margin:auto;
+      display:flex;
+      gap:8px;
+      padding:10px 16px;
+      overflow:auto;
+    }
+    .nav-btn{
+      border:0;
+      background:#eef2ff;
+      color:#1e3a8a;
+      padding:10px 16px;
+      border-radius:10px;
+      font-weight:700;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .nav-btn.active{background:var(--primary);color:#fff}
+    main{max-width:1100px;margin:24px auto;padding:0 16px 40px}
+    .section{display:none}
+    .section.active{display:block}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:16px;
+      box-shadow:var(--shadow);
+      padding:20px;
+    }
+    .col-12{grid-column:span 12}
+    .col-8{grid-column:span 8}
+    .col-6{grid-column:span 6}
+    .col-4{grid-column:span 4}
+    h2,h3{margin-top:0}
+    label{
+      display:block;
+      margin:14px 0 6px;
+      font-size:14px;
+      font-weight:700;
+    }
+    input,select,textarea{
+      width:100%;
+      padding:11px 12px;
+      border:1px solid #cbd5e1;
+      border-radius:10px;
+      font-size:14px;
+      outline:none;
+      background:#fff;
+    }
+    input:focus,select:focus,textarea:focus{
+      border-color:var(--primary);
+      box-shadow:0 0 0 3px rgba(37,99,235,.12);
+    }
+    textarea{min-height:110px;resize:vertical}
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      border:0;
+      border-radius:10px;
+      padding:11px 16px;
+      font-weight:700;
+      cursor:pointer;
+      font-size:14px;
+    }
+    .btn-primary{background:var(--primary);color:#fff}
+    .btn-primary:hover{background:var(--primary-dark)}
+    .btn-danger{background:var(--danger);color:#fff}
+    .btn-success{background:var(--success);color:#fff}
+    .btn-secondary{background:#e5e7eb;color:#111827}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    .badge{
+      display:inline-block;
+      font-size:12px;
+      font-weight:800;
+      border-radius:999px;
+      padding:5px 9px;
+    }
+    .open{background:#fee2e2;color:#991b1b}
+    .closed{background:#dcfce7;color:#166534}
+    .damage{background:#ffedd5;color:#9a3412}
+    .hazard{background:#fef3c7;color:#92400e}
+    .muted{color:var(--muted);font-size:13px}
+    .stat{
+      text-align:center;
+      padding:20px;
+    }
+    .stat .num{font-size:34px;font-weight:800}
+    .report{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:16px;
+      margin-bottom:14px;
+      background:#fff;
+    }
+    .report-head{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .report-title{font-weight:800}
+    .meta{font-size:13px;color:var(--muted);line-height:1.7}
+    .photo{
+      width:100%;
+      max-height:280px;
+      object-fit:cover;
+      border-radius:12px;
+      border:1px solid var(--border);
+      margin-top:10px;
+      background:#f8fafc;
+    }
+    .empty{
+      text-align:center;
+      color:var(--muted);
+      padding:28px 10px;
+      border:1px dashed #cbd5e1;
+      border-radius:12px;
+      background:#f8fafc;
+    }
+    .login-box{max-width:430px;margin:auto}
+    .hidden{display:none!important}
+    .notice{
+      padding:12px 14px;
+      border-radius:10px;
+      margin-top:12px;
+      font-size:14px;
+      font-weight:700;
+    }
+    .notice.ok{background:#dcfce7;color:#166534}
+    .notice.err{background:#fee2e2;color:#991b1b}
+    .ticket-box{
+      margin-top:14px;
+      padding:18px;
+      border:2px dashed #2563eb;
+      border-radius:14px;
+      background:#eff6ff;
+      text-align:center;
+    }
+    .ticket-label{
+      font-size:13px;
+      color:#475569;
+      margin-bottom:7px;
+      font-weight:700;
+    }
+    .ticket-number{
+      font-size:22px;
+      font-weight:900;
+      letter-spacing:.5px;
+      color:#1d4ed8;
+      word-break:break-word;
+      margin-bottom:12px;
+    }
+    .toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:16px;
+    }
+    .toolbar input,.toolbar select{max-width:240px}
+    footer{
+      text-align:center;
+      color:var(--muted);
+      font-size:12px;
+      padding:20px;
+    }
+
+    .table-wrap{
+      width:100%;
+      overflow-x:auto;
+      margin-top:14px;
+      border:1px solid var(--border);
+      border-radius:12px;
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:900px;
+      background:#fff;
+    }
+    th,td{
+      padding:11px 12px;
+      border-bottom:1px solid var(--border);
+      text-align:left;
+      font-size:13px;
+      vertical-align:top;
+    }
+    th{
+      background:#f8fafc;
+      font-weight:800;
+      color:#334155;
+      position:sticky;
+      top:0;
+    }
+    tr:last-child td{border-bottom:0}
+    .aging-good{background:#dcfce7;color:#166534}
+    .aging-warn{background:#fef3c7;color:#92400e}
+    .aging-bad{background:#fee2e2;color:#991b1b}
+
+    @media(max-width:760px){
+      .col-8,.col-6,.col-4{grid-column:span 12}
+      .brand{font-size:22px}
+      .toolbar input,.toolbar select{max-width:none}
+    }
+  
+    header{position:relative;}
+    .analog-clock{
+      position:absolute;
+      right:18px;
+      top:-6px;
+      width:72px;
+      height:72px;
+      border:4px solid rgba(255,255,255,.9);
+      border-radius:50%;
+      background:rgba(255,255,255,.08);
+    }
+    .analog-clock:before{
+      content:"";
+      position:absolute;
+      left:50%;top:50%;
+      width:8px;height:8px;
+      background:#fff;
+      border-radius:50%;
+      transform:translate(-50%,-50%);
+      z-index:5;
+    }
+    .hand{
+      position:absolute;
+      left:50%;
+      bottom:50%;
+      transform-origin:bottom center;
+      border-radius:5px;
+    }
+    .hour{width:4px;height:18px;background:#fff;}
+    .minute{width:3px;height:25px;background:#fff;}
+    .second{width:2px;height:28px;background:#fca5a5;}
+    @media(max-width:760px){.analog-clock{width:60px;height:60px;right:12px;top:-8px}.brand{max-width:calc(100% - 75px);padding-right:0}.sub{padding-right:75px}}
+
+</style>
+
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="TSP Messku" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+
+
+<style>
+  #installAppBtn{
+    position:fixed;
+    right:16px;
+    bottom:18px;
+    z-index:999;
+    border:0;
+    border-radius:999px;
+    padding:12px 16px;
+    background:#0f172a;
+    color:#fff;
+    font-weight:800;
+    box-shadow:0 10px 30px rgba(15,23,42,.24);
+    display:none;
+    cursor:pointer;
+  }
+  #installAppBtn.show{display:block}
+  @media(max-width:760px){
+    #installAppBtn{right:12px;bottom:12px;padding:11px 14px;font-size:13px}
+  }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand"><span class="brand-track">TSP Messku</span></div>
+    <div class="sub">Pelaporan kerusakan dan potensi bahaya di area mess</div>
+    <div class="analog-clock">
+      <div id="hourHand" class="hand hour"></div>
+      <div id="minuteHand" class="hand minute"></div>
+      <div id="secondHand" class="hand second"></div>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="nav-inner">
+    <button class="nav-btn active" data-target="lapor">Buat Laporan</button>
+    <button class="nav-btn" data-target="cek">Cek Status</button>
+    <button class="nav-btn" data-target="admin">Admin</button>
+  </div>
+</nav>
+
+<main>
+  <section id="lapor" class="section active">
+    <div class="grid">
+      <div class="card col-8">
+        <h2>Form Pelaporan</h2>
+        <p class="muted">Semua data identitas dan foto wajib diisi agar laporan dapat diproses.</p>
+
+        <form id="reportForm">
+          <label>Nama Penghuni *</label>
+          <input id="nama" required placeholder="Contoh: Andi Saputra">
+
+          <label>No. HP Pelapor *</label>
+          <input id="nohp" type="tel" required placeholder="Contoh: 081234567890">
+
+          <div class="grid">
+            <div class="col-6">
+              <label>Nama Facility *</label>
+              <select id="mess" required>
+                <option value="">Pilih Facility</option>
+                <option value="Mess">Mess</option>
+                <option value="Toilet">Toilet</option>
+                <option value="Office">Office</option>
+                <option value="Lain Lain">Lain Lain</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label>No. Facility *</label>
+              <input id="kamar" required placeholder="Contoh: No. Kamar / Nomor Facility">
+            </div>
+          </div>
+
+          <label>Jenis Laporan *</label>
+          <select id="jenis" required>
+            <option value="">Pilih jenis laporan</option>
+            <option value="Kerusakan">Kerusakan</option>
+            <option value="Potensi Bahaya">Potensi Bahaya</option>
+          </select>
+
+          <label>Lokasi Kerusakan / Potensi Bahaya *</label>
+          <input id="lokasi" required placeholder="Contoh: Kamar mandi lantai 2">
+
+          <label>Foto Kondisi *</label>
+          <input id="foto" type="file" accept="image/*" required>
+          <p class="muted">Di HP, pengguna dapat memilih mengambil foto melalui kamera atau memilih foto yang sudah tersedia dari galeri.</p>
+
+          <img id="previewFoto" class="photo hidden" alt="Preview foto laporan">
+
+          <div class="actions">
+            <button class="btn btn-primary" type="submit">Kirim Laporan</button>
+            <button class="btn btn-secondary" type="reset">Reset</button>
+          </div>
+          <div id="reportNotice"></div>
+        </form>
+      </div>
+
+      <div class="card col-4">
+        <h3>Alur Laporan</h3>
+        <p><strong>1.</strong> Penghuni mengisi laporan dan mengunggah foto.</p>
+        <p><strong>2.</strong> Status laporan otomatis <span class="badge open">OPEN</span>.</p>
+        <p><strong>3.</strong> Admin melakukan penanganan.</p>
+        <p><strong>4.</strong> Admin mengunggah foto perbaikan.</p>
+        <p><strong>5.</strong> Status berubah menjadi <span class="badge closed">CLOSED</span>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="cek" class="section">
+    <div class="card">
+      <h2>Cek Status Laporan</h2>
+      <div class="toolbar">
+        <input id="ticketSearch" placeholder="Masukkan nomor tiket">
+        <button class="btn btn-primary" onclick="searchTicket()">Cari</button>
+      </div>
+      <div id="ticketResult"></div>
+    </div>
+  </section>
+
+  <section id="admin" class="section">
+    <div id="adminLogin" class="card login-box">
+      <h2>Login Admin</h2>
+      <label>Username</label>
+      <input id="adminUser" placeholder="admin">
+      <label>Password</label>
+      <input id="adminPass" type="password" placeholder="Password admin">
+      <div class="actions">
+        <button class="btn btn-primary" onclick="loginAdmin()">Login</button>
+      </div>
+      <div id="loginNotice"></div>
+      <p class="muted">Default: admin / Admin123</p>
+    </div>
+
+    <div id="adminPanel" class="hidden">
+      <div class="grid">
+        <div class="card col-4 stat">
+          <div class="muted">Total Laporan</div>
+          <div id="statTotal" class="num">0</div>
+        </div>
+        <div class="card col-4 stat">
+          <div class="muted">OPEN</div>
+          <div id="statOpen" class="num">0</div>
+        </div>
+        <div class="card col-4 stat">
+          <div class="muted">CLOSED</div>
+          <div id="statClosed" class="num">0</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <div class="report-head">
+          <div>
+            <h2 style="margin-bottom:5px">Summary Status & Aging</h2>
+            <div class="muted">Ringkasan seluruh laporan OPEN dan CLOSED beserta umur penanganannya.</div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>No. Tiket</th>
+                <th>Nama</th>
+                <th>No. HP</th>
+                <th>Facility / No. Facility</th>
+                <th>Jenis</th>
+                <th>Status</th>
+                <th>Tanggal Lapor</th>
+                <th>Tanggal Close</th>
+                <th>Aging</th>
+              </tr>
+            </thead>
+            <tbody id="summaryBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <div class="report-head">
+          <div>
+            <h2 style="margin-bottom:5px">Dashboard Admin</h2>
+            <div class="muted">Kelola laporan facility</div>
+          </div>
+          <div class="actions">
+            <button class="btn btn-success" onclick="downloadExcel()">Download Excel</button>
+            <button class="btn btn-primary" onclick="downloadPDF()">Download PDF</button>
+            <button class="btn btn-secondary" onclick="exportDatabase()">Export Database</button>
+            <button class="btn btn-secondary" onclick="document.getElementById('importDatabaseFile').click()">Import Database</button>
+            <input id="importDatabaseFile" type="file" accept="application/json" style="display:none" onchange="importDatabase(event)">
+            <button class="btn btn-secondary" onclick="showChangePassword()">Ubah Password Admin</button>
+            <button class="btn btn-secondary" onclick="logoutAdmin()">Logout</button>
+          </div>
+        </div>
+
+        <div id="changePasswordBox" class="card hidden" style="margin-top:16px">
+          <h3>Ubah Password Admin</h3>
+          <label>Password Lama</label>
+          <input id="oldAdminPass" type="password" placeholder="Masukkan password lama">
+
+          <label>Password Baru</label>
+          <input id="newAdminPass" type="password" placeholder="Masukkan password baru">
+
+          <label>Konfirmasi Password Baru</label>
+          <input id="confirmAdminPass" type="password" placeholder="Ulangi password baru">
+
+          <div class="actions">
+            <button class="btn btn-primary" onclick="changeAdminPassword()">Simpan Password</button>
+            <button class="btn btn-secondary" onclick="hideChangePassword()">Batal</button>
+          </div>
+          <div id="passwordNotice"></div>
+        </div>
+
+        <div class="toolbar">
+          <select id="filterStatus" onchange="renderAdmin()">
+            <option value="ALL">Semua Status</option>
+            <option value="OPEN">OPEN</option>
+            <option value="CLOSED">CLOSED</option>
+          </select>
+          <input id="adminSearch" placeholder="Cari nama, facility, no facility, tiket" oninput="renderAdmin()">
+        </div>
+
+        <div id="adminReports"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+
+<button id="installAppBtn" type="button">Pasang TSP Messku</button>
+<footer>TSP Messku • Aplikasi HTML Mandiri • Data disimpan pada browser perangkat</footer>
+
+<script>
+  const STORAGE_KEY = 'messSafeReportsV1';
+  const ADMIN_USER = 'admin';
+  const DEFAULT_ADMIN_PASS = 'Admin123';
+  const ADMIN_PASS_KEY = 'messAdminPassword';
+
+  function getAdminPassword(){
+    return localStorage.getItem(ADMIN_PASS_KEY) || DEFAULT_ADMIN_PASS;
+  }
+
+  const getReports = () => JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  const saveReports = data => localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+  function exportDatabase(){
+    const data = {
+      app:'TSP Facility Report',
+      exportedAt:new Date().toISOString(),
+      reports:getReports()
+    };
+
+    const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'backup-facility-database-' + new Date().toISOString().slice(0,10) + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function importDatabase(event){
+    const file = event.target.files[0];
+    if(!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e){
+      try{
+        const data = JSON.parse(e.target.result);
+        if(!Array.isArray(data.reports)) throw new Error('Format database tidak sesuai');
+
+        if(confirm('Data lama akan diganti dengan database yang diimport. Lanjutkan?')){
+          saveReports(data.reports);
+          renderAdmin();
+          alert('Database berhasil diimport.');
+        }
+      }catch(err){
+        alert('File database tidak valid.');
+      }
+    };
+    reader.readAsText(file);
+    event.target.value='';
+  }
+
+  function makeTicket(){
+    const d = new Date();
+    const date = d.getFullYear().toString() +
+      String(d.getMonth()+1).padStart(2,'0') +
+      String(d.getDate()).padStart(2,'0');
+    const rand = Math.floor(1000 + Math.random()*9000);
+    return `MS-${date}-${rand}`;
+  }
+
+  function formatDate(v){
+    if(!v) return '-';
+    return new Date(v).toLocaleString('id-ID');
+  }
+
+  function escapeHtml(str=''){
+    return str.replace(/[&<>"']/g, s => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+    })[s]);
+  }
+
+  function fileToBase64(file){
+    return new Promise((resolve,reject)=>{
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  document.querySelectorAll('.nav-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.target).classList.add('active');
+      if(btn.dataset.target === 'admin' && sessionStorage.getItem('messAdmin') === '1'){
+        showAdmin();
+      }
+    });
+  });
+
+  document.getElementById('foto').addEventListener('change', async e=>{
+    const f = e.target.files[0];
+    const p = document.getElementById('previewFoto');
+    if(!f){ p.classList.add('hidden'); return; }
+    p.src = await fileToBase64(f);
+    p.classList.remove('hidden');
+  });
+
+  document.getElementById('reportForm').addEventListener('reset', ()=>{
+    setTimeout(()=>document.getElementById('previewFoto').classList.add('hidden'),0);
+  });
+
+  document.getElementById('reportForm').addEventListener('submit', async e=>{
+    e.preventDefault();
+    const fotoFile = document.getElementById('foto').files[0];
+    if(!fotoFile) return;
+
+    try{
+      const foto = await fileToBase64(fotoFile);
+      const laporan = {
+        id: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(),
+        ticket: makeTicket(),
+        nama: document.getElementById('nama').value.trim(),
+        nohp: document.getElementById('nohp').value.trim(),
+        mess: document.getElementById('mess').value.trim(),
+        kamar: document.getElementById('kamar').value.trim(),
+        jenis: document.getElementById('jenis').value,
+        lokasi: document.getElementById('lokasi').value.trim(),        foto,
+        status:'OPEN',
+        createdAt:new Date().toISOString(),
+        closedAt:null,
+        repairPhoto:null,
+        repairNote:''
+      };
+
+      const reports = getReports();
+      reports.unshift(laporan);
+      saveReports(reports);
+
+      document.getElementById('reportNotice').innerHTML = `
+        <div class="notice ok">Laporan berhasil dikirim.</div>
+        <div class="ticket-box">
+          <div class="ticket-label">Nomor Tiket Laporan Anda</div>
+          <div class="ticket-number">${laporan.ticket}</div>
+          <button type="button" id="copyTicketBtn" class="btn btn-primary" onclick="copyTicket('${laporan.ticket}')">Copy Nomor Tiket</button>
+          <div class="muted" style="margin-top:10px">Simpan nomor tiket ini untuk mengecek status laporan.</div>
+        </div>`;
+      e.target.reset();
+      document.getElementById('previewFoto').classList.add('hidden');
+    }catch(err){
+      document.getElementById('reportNotice').innerHTML =
+        `<div class="notice err">Foto terlalu besar atau penyimpanan browser penuh. Coba gunakan foto dengan ukuran lebih kecil.</div>`;
+    }
+  });
+
+  function calcAging(r){
+    const start = new Date(r.createdAt);
+    const end = r.status === 'CLOSED' && r.closedAt ? new Date(r.closedAt) : new Date();
+    const diffMs = Math.max(0, end - start);
+    const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    return {days, hours};
+  }
+
+  function agingText(r){
+    const a = calcAging(r);
+    if(a.days > 0) return `${a.days} hari ${a.hours} jam`;
+    return `${a.hours} jam`;
+  }
+
+  function agingClass(r){
+    const a = calcAging(r).days;
+    if(r.status === 'CLOSED') return 'aging-good';
+    if(a >= 7) return 'aging-bad';
+    if(a >= 3) return 'aging-warn';
+    return 'aging-good';
+  }
+
+  function renderSummary(reports){
+    const body = document.getElementById('summaryBody');
+    if(!body) return;
+
+    if(!reports.length){
+      body.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#6b7280">Belum ada laporan.</td></tr>';
+      return;
+    }
+
+    body.innerHTML = reports.map(r => `
+      <tr>
+        <td><strong>${escapeHtml(r.ticket)}</strong></td>
+        <td>${escapeHtml(r.nama)}</td>
+        <td>${escapeHtml(r.nohp || '-')}</td>
+        <td>${escapeHtml(r.mess)} / ${escapeHtml(r.kamar)}</td>
+        <td>${escapeHtml(r.jenis)}</td>
+        <td><span class="badge ${r.status==='OPEN'?'open':'closed'}">${r.status}</span></td>
+        <td>${formatDate(r.createdAt)}</td>
+        <td>${r.closedAt ? formatDate(r.closedAt) : '-'}</td>
+        <td><span class="badge ${agingClass(r)}">${agingText(r)}</span></td>
+      </tr>
+    `).join('');
+  }
+
+  function reportCard(r, admin=false){
+    const jenisClass = r.jenis === 'Kerusakan' ? 'damage' : 'hazard';
+    return `
+      <div class="report">
+        <div class="report-head">
+          <div>
+            <div class="report-title">${escapeHtml(r.ticket)}</div>
+            <div class="meta">${formatDate(r.createdAt)}</div>
+          </div>
+          <div>
+            <span class="badge ${jenisClass}">${escapeHtml(r.jenis)}</span>
+            <span class="badge ${r.status==='OPEN'?'open':'closed'}">${r.status}</span>
+          </div>
+        </div>
+        <div class="meta">
+          <strong>Nama:</strong> ${escapeHtml(r.nama)}<br>
+          <strong>No. HP:</strong> ${escapeHtml(r.nohp || '-')}<br>
+          <strong>Facility:</strong> ${escapeHtml(r.mess)}<br>
+          <strong>No. Facility:</strong> ${escapeHtml(r.kamar)}<br>
+          <strong>Lokasi:</strong> ${escapeHtml(r.lokasi)}<br>
+          <strong>Aging:</strong> ${agingText(r)}
+        </div>        <img class="photo" src="${r.foto}" alt="Foto laporan">
+        ${r.status==='CLOSED' ? `
+          <hr style="border:0;border-top:1px solid #e5e7eb;margin:16px 0">
+          <div class="meta"><strong>Ditutup:</strong> ${formatDate(r.closedAt)}</div>
+          <p><strong>Catatan Perbaikan:</strong><br>${escapeHtml(r.repairNote || '-')}</p>
+          ${r.repairPhoto ? `<img class="photo" src="${r.repairPhoto}" alt="Foto perbaikan">` : ''}
+        ` : ''}
+        ${admin && r.status==='OPEN' ? `
+          <div style="margin-top:16px;padding-top:14px;border-top:1px solid #e5e7eb">
+            <label>Catatan Perbaikan</label>
+            <textarea id="note-${r.id}" placeholder="Contoh: Keran telah diganti dan area sudah aman."></textarea>
+            <label>Foto Hasil Perbaikan *</label>
+            <input type="file" id="repair-${r.id}" accept="image/*">
+            <div class="actions">
+              <button class="btn btn-success" onclick="closeReport('${r.id}')">Close Laporan</button>
+            </div>
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }
+
+  async function copyTicket(ticket){
+    try{
+      await navigator.clipboard.writeText(ticket);
+      const btn = document.getElementById('copyTicketBtn');
+      if(btn){
+        const oldText = btn.textContent;
+        btn.textContent = 'Berhasil Dicopy';
+        setTimeout(()=>btn.textContent = oldText, 1600);
+      }
+    }catch(err){
+      const temp = document.createElement('textarea');
+      temp.value = ticket;
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand('copy');
+      document.body.removeChild(temp);
+      alert('Nomor tiket berhasil dicopy.');
+    }
+  }
+
+  function searchTicket(){
+    const q = document.getElementById('ticketSearch').value.trim().toLowerCase();
+    const box = document.getElementById('ticketResult');
+    if(!q){
+      box.innerHTML = '<div class="notice err">Masukkan nomor tiket terlebih dahulu.</div>';
+      return;
+    }
+    const r = getReports().find(x=>x.ticket.toLowerCase()===q);
+    box.innerHTML = r ? reportCard(r,false) : '<div class="empty">Nomor tiket tidak ditemukan.</div>';
+  }
+
+  function loginAdmin(){
+    const u = document.getElementById('adminUser').value;
+    const p = document.getElementById('adminPass').value;
+    if(u===ADMIN_USER && p===getAdminPassword()){
+      sessionStorage.setItem('messAdmin','1');
+      showAdmin();
+      document.getElementById('loginNotice').innerHTML='';
+    }else{
+      document.getElementById('loginNotice').innerHTML =
+        '<div class="notice err">Username atau password salah.</div>';
+    }
+  }
+
+  function showAdmin(){
+    document.getElementById('adminLogin').classList.add('hidden');
+    document.getElementById('adminPanel').classList.remove('hidden');
+    renderAdmin();
+  }
+
+  function logoutAdmin(){
+    sessionStorage.removeItem('messAdmin');
+    document.getElementById('adminPanel').classList.add('hidden');
+    document.getElementById('adminLogin').classList.remove('hidden');
+  }
+
+  function showChangePassword(){
+    document.getElementById('changePasswordBox').classList.remove('hidden');
+    document.getElementById('passwordNotice').innerHTML='';
+  }
+
+  function hideChangePassword(){
+    document.getElementById('changePasswordBox').classList.add('hidden');
+    document.getElementById('oldAdminPass').value='';
+    document.getElementById('newAdminPass').value='';
+    document.getElementById('confirmAdminPass').value='';
+  }
+
+  function changeAdminPassword(){
+    const oldPass = document.getElementById('oldAdminPass').value;
+    const newPass = document.getElementById('newAdminPass').value;
+    const confirmPass = document.getElementById('confirmAdminPass').value;
+    const notice = document.getElementById('passwordNotice');
+
+    if(oldPass !== getAdminPassword()){
+      notice.innerHTML='<div class="notice err">Password lama salah.</div>';
+      return;
+    }
+
+    if(newPass.length < 6){
+      notice.innerHTML='<div class="notice err">Password baru minimal 6 karakter.</div>';
+      return;
+    }
+
+    if(newPass !== confirmPass){
+      notice.innerHTML='<div class="notice err">Konfirmasi password tidak sama.</div>';
+      return;
+    }
+
+    localStorage.setItem(ADMIN_PASS_KEY,newPass);
+    notice.innerHTML='<div class="notice ok">Password admin berhasil diubah.</div>';
+    setTimeout(()=>hideChangePassword(),1500);
+  }
+
+  async function closeReport(id){
+    const fileInput = document.getElementById(`repair-${id}`);
+    const note = document.getElementById(`note-${id}`).value.trim();
+
+    if(!fileInput.files[0]){
+      alert('Foto hasil perbaikan wajib diunggah sebelum laporan ditutup.');
+      return;
+    }
+
+    try{
+      const repairPhoto = await fileToBase64(fileInput.files[0]);
+      const reports = getReports();
+      const idx = reports.findIndex(x=>x.id===id);
+      if(idx<0) return;
+
+      reports[idx].status='CLOSED';
+      reports[idx].closedAt=new Date().toISOString();
+      reports[idx].repairPhoto=repairPhoto;
+      reports[idx].repairNote=note;
+      saveReports(reports);
+      renderAdmin();
+    }catch(err){
+      alert('Gagal menyimpan foto perbaikan. Gunakan foto dengan ukuran lebih kecil.');
+    }
+  }
+
+  function renderAdmin(){
+    const reports = getReports();
+    document.getElementById('statTotal').textContent = reports.length;
+    document.getElementById('statOpen').textContent = reports.filter(r=>r.status==='OPEN').length;
+    document.getElementById('statClosed').textContent = reports.filter(r=>r.status==='CLOSED').length;
+    renderSummary(reports);
+
+    const filter = document.getElementById('filterStatus').value;
+    const q = document.getElementById('adminSearch').value.trim().toLowerCase();
+
+    const list = reports.filter(r=>{
+      const statusOk = filter==='ALL' || r.status===filter;
+      const text = `${r.ticket} ${r.nama} ${r.nohp || ''} ${r.mess} ${r.kamar} ${r.lokasi}`.toLowerCase();
+      return statusOk && (!q || text.includes(q));
+    });
+
+    document.getElementById('adminReports').innerHTML =
+      list.length ? list.map(r=>reportCard(r,true)).join('') :
+      '<div class="empty">Belum ada laporan yang sesuai.</div>';
+  }
+
+  if(sessionStorage.getItem('messAdmin')==='1') showAdmin();
+
+  function getExportData(){
+    return getReports().map((r,i)=>({
+      No:i+1,
+      'No Tiket':r.ticket,
+      Nama:r.nama,
+      'No HP':r.nohp,
+      Facility:r.mess,
+      'No Facility':r.kamar,
+      Jenis:r.jenis,
+      Lokasi:r.lokasi,
+      Status:r.status,
+      'Tanggal Lapor':formatDate(r.createdAt),
+      'Tanggal Close':r.closedAt ? formatDate(r.closedAt) : '-'
+    }));
+  }
+
+  function downloadExcel(){
+    const data=getExportData();
+    if(!data.length){alert('Belum ada data laporan.');return;}
+    const ws=XLSX.utils.json_to_sheet(data);
+    const wb=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb,ws,'Laporan Facility');
+    XLSX.writeFile(wb,'Laporan_Facility.xlsx');
+  }
+
+  function downloadPDF(){
+    const data=getExportData();
+    if(!data.length){alert('Belum ada data laporan.');return;}
+    const {jsPDF}=window.jspdf;
+    const doc=new jsPDF('landscape');
+    doc.text('Laporan Facility',14,15);
+    doc.autoTable({
+      startY:22,
+      head:[['No','Tiket','Nama','HP','Facility','No Facility','Jenis','Status','Tanggal']],
+      body:data.map(x=>[x.No,x['No Tiket'],x.Nama,x['No HP'],x.Facility,x['No Facility'],x.Jenis,x.Status,x['Tanggal Lapor']])
+    });
+    doc.save('Laporan_Facility.pdf');
+  }
+</script>
+
+<script>
+  let deferredInstallPrompt = null;
+  const installBtn = document.getElementById('installAppBtn');
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    installBtn?.classList.add('show');
+  });
+
+  installBtn?.addEventListener('click', async () => {
+    if (!deferredInstallPrompt) return;
+    deferredInstallPrompt.prompt();
+    await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt = null;
+    installBtn.classList.remove('show');
+  });
+
+  window.addEventListener('appinstalled', () => {
+    installBtn?.classList.remove('show');
+    deferredInstallPrompt = null;
+  });
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch(err => {
+        console.warn('Service Worker gagal didaftarkan:', err);
+      });
+    });
+  }
+
+
+  function updateClock(){
+    const now = new Date();
+    const sec = now.getSeconds();
+    const min = now.getMinutes();
+    const hour = now.getHours()%12;
+    const secDeg = sec * 6;
+    const minDeg = min * 6 + sec * 0.1;
+    const hourDeg = hour * 30 + min * 0.5;
+    document.getElementById('secondHand').style.transform = `rotate(${secDeg}deg)`;
+    document.getElementById('minuteHand').style.transform = `rotate(${minDeg}deg)`;
+    document.getElementById('hourHand').style.transform = `rotate(${hourDeg}deg)`;
+  }
+  updateClock();
+  setInterval(updateClock,1000);
+
+</script>
+
+</body>
+</html>
