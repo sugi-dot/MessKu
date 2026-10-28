@@ -2,363 +2,235 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>TSP Messku - Pelaporan Kerusakan & Potensi Bahaya</title>
-  <style>
-    :root{
-      --bg:#f4f7fb;
-      --card:#ffffff;
-      --text:#1f2937;
-      --muted:#6b7280;
-      --primary:#2563eb;
-      --primary-dark:#1d4ed8;
-      --danger:#dc2626;
-      --success:#16a34a;
-      --warning:#d97706;
-      --border:#e5e7eb;
-      --shadow:0 10px 30px rgba(15,23,42,.08);
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:Arial,Helvetica,sans-serif;
-      background:var(--bg);
-      color:var(--text);
-    }
-    header{
-      background:linear-gradient(135deg,#0f172a,#2563eb);
-      color:#fff;
-      padding:22px 16px;
-      box-shadow:var(--shadow);
-    }
-    .wrap{max-width:1100px;margin:auto;position:relative}
-    .brand{max-width:calc(100% - 95px);overflow:hidden;font-size:26px;font-weight:800;letter-spacing:.3px}
-    .brand-track{display:inline-block;white-space:nowrap;padding-left:100%;animation:brandMarquee 10s linear infinite}
-    .sub{margin-top:6px;opacity:.88;font-size:14px}
-    @keyframes brandMarquee{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
-    nav{
-      background:#fff;
-      border-bottom:1px solid var(--border);
-      position:sticky;
-      top:0;
-      z-index:20;
-    }
-    .nav-inner{
-      max-width:1100px;
-      margin:auto;
-      display:flex;
-      gap:8px;
-      padding:10px 16px;
-      overflow:auto;
-    }
-    .nav-btn{
-      border:0;
-      background:#eef2ff;
-      color:#1e3a8a;
-      padding:10px 16px;
-      border-radius:10px;
-      font-weight:700;
-      cursor:pointer;
-      white-space:nowrap;
-    }
-    .nav-btn.active{background:var(--primary);color:#fff}
-    main{max-width:1100px;margin:24px auto;padding:0 16px 40px}
-    .section{display:none}
-    .section.active{display:block}
-    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
-    .card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:16px;
-      box-shadow:var(--shadow);
-      padding:20px;
-    }
-    .col-12{grid-column:span 12}
-    .col-8{grid-column:span 8}
-    .col-6{grid-column:span 6}
-    .col-4{grid-column:span 4}
-    h2,h3{margin-top:0}
-    label{
-      display:block;
-      margin:14px 0 6px;
-      font-size:14px;
-      font-weight:700;
-    }
-    input,select,textarea{
-      width:100%;
-      padding:11px 12px;
-      border:1px solid #cbd5e1;
-      border-radius:10px;
-      font-size:14px;
-      outline:none;
-      background:#fff;
-    }
-    input:focus,select:focus,textarea:focus{
-      border-color:var(--primary);
-      box-shadow:0 0 0 3px rgba(37,99,235,.12);
-    }
-    textarea{min-height:110px;resize:vertical}
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      border:0;
-      border-radius:10px;
-      padding:11px 16px;
-      font-weight:700;
-      cursor:pointer;
-      font-size:14px;
-    }
-    .btn-primary{background:var(--primary);color:#fff}
-    .btn-primary:hover{background:var(--primary-dark)}
-    .btn-danger{background:var(--danger);color:#fff}
-    .btn-success{background:var(--success);color:#fff}
-    .btn-secondary{background:#e5e7eb;color:#111827}
-    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
-    .badge{
-      display:inline-block;
-      font-size:12px;
-      font-weight:800;
-      border-radius:999px;
-      padding:5px 9px;
-    }
-    .open{background:#fee2e2;color:#991b1b}
-    .closed{background:#dcfce7;color:#166534}
-    .damage{background:#ffedd5;color:#9a3412}
-    .hazard{background:#fef3c7;color:#92400e}
-    .muted{color:var(--muted);font-size:13px}
-    .stat{
-      text-align:center;
-      padding:20px;
-    }
-    .stat .num{font-size:34px;font-weight:800}
-    .report{
-      border:1px solid var(--border);
-      border-radius:14px;
-      padding:16px;
-      margin-bottom:14px;
-      background:#fff;
-    }
-    .report-head{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-bottom:10px;
-    }
-    .report-title{font-weight:800}
-    .meta{font-size:13px;color:var(--muted);line-height:1.7}
-    .photo{
-      width:100%;
-      max-height:280px;
-      object-fit:cover;
-      border-radius:12px;
-      border:1px solid var(--border);
-      margin-top:10px;
-      background:#f8fafc;
-    }
-    .empty{
-      text-align:center;
-      color:var(--muted);
-      padding:28px 10px;
-      border:1px dashed #cbd5e1;
-      border-radius:12px;
-      background:#f8fafc;
-    }
-    .login-box{max-width:430px;margin:auto}
-    .hidden{display:none!important}
-    .notice{
-      padding:12px 14px;
-      border-radius:10px;
-      margin-top:12px;
-      font-size:14px;
-      font-weight:700;
-    }
-    .notice.ok{background:#dcfce7;color:#166534}
-    .notice.err{background:#fee2e2;color:#991b1b}
-    .ticket-box{
-      margin-top:14px;
-      padding:18px;
-      border:2px dashed #2563eb;
-      border-radius:14px;
-      background:#eff6ff;
-      text-align:center;
-    }
-    .ticket-label{
-      font-size:13px;
-      color:#475569;
-      margin-bottom:7px;
-      font-weight:700;
-    }
-    .ticket-number{
-      font-size:22px;
-      font-weight:900;
-      letter-spacing:.5px;
-      color:#1d4ed8;
-      word-break:break-word;
-      margin-bottom:12px;
-    }
-    .toolbar{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-bottom:16px;
-    }
-    .toolbar input,.toolbar select{max-width:240px}
-    footer{
-      text-align:center;
-      color:var(--muted);
-      font-size:12px;
-      padding:20px;
-    }
-
-    .table-wrap{
-      width:100%;
-      overflow-x:auto;
-      margin-top:14px;
-      border:1px solid var(--border);
-      border-radius:12px;
-    }
-    table{
-      width:100%;
-      border-collapse:collapse;
-      min-width:900px;
-      background:#fff;
-    }
-    th,td{
-      padding:11px 12px;
-      border-bottom:1px solid var(--border);
-      text-align:left;
-      font-size:13px;
-      vertical-align:top;
-    }
-    th{
-      background:#f8fafc;
-      font-weight:800;
-      color:#334155;
-      position:sticky;
-      top:0;
-    }
-    tr:last-child td{border-bottom:0}
-    .aging-good{background:#dcfce7;color:#166534}
-    .aging-warn{background:#fef3c7;color:#92400e}
-    .aging-bad{background:#fee2e2;color:#991b1b}
-
-    @media(max-width:760px){
-      .col-8,.col-6,.col-4{grid-column:span 12}
-      .brand{font-size:22px}
-      .toolbar input,.toolbar select{max-width:none}
-    }
-  
-    header{position:relative;}
-    .analog-clock{
-      position:absolute;
-      right:18px;
-      top:-6px;
-      width:72px;
-      height:72px;
-      border:4px solid rgba(255,255,255,.9);
-      border-radius:50%;
-      background:rgba(255,255,255,.08);
-    }
-    .analog-clock:before{
-      content:"";
-      position:absolute;
-      left:50%;top:50%;
-      width:8px;height:8px;
-      background:#fff;
-      border-radius:50%;
-      transform:translate(-50%,-50%);
-      z-index:5;
-    }
-    .hand{
-      position:absolute;
-      left:50%;
-      bottom:50%;
-      transform-origin:bottom center;
-      border-radius:5px;
-    }
-    .hour{width:4px;height:18px;background:#fff;}
-    .minute{width:3px;height:25px;background:#fff;}
-    .second{width:2px;height:28px;background:#fca5a5;}
-    @media(max-width:760px){.analog-clock{width:60px;height:60px;right:12px;top:-8px}.brand{max-width:calc(100% - 75px);padding-right:0}.sub{padding-right:75px}}
-
-</style>
-
-  <meta name="theme-color" content="#0f172a" />
+  <meta name="theme-color" content="#fdf6ee" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#1e1e1e" media="(prefers-color-scheme: dark)" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="TSP Messku" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script>
+    const c = n => `rgb(var(--${n}) / <alpha-value>)`;
+    tailwind.config = {
+      theme: { extend: {
+        fontFamily: { sans: ['"Plus Jakarta Sans"','ui-sans-serif','system-ui','-apple-system','Segoe UI','Roboto','Arial','sans-serif'] },
+        colors: {
+          bg: c('bg'), surface: c('surface'), sunken: c('sunken'),
+          ink: c('ink'), muted: c('muted'), line: { DEFAULT: c('line'), strong: c('line2') },
+          brand: { DEFAULT: c('brand'), hover: c('brand-h'), soft: c('brand-s'), ink: c('brand-i') },
+          sand: { DEFAULT: c('sand'), soft: c('sand-s'), ink: c('sand-i') },
+          ok: { DEFAULT: c('ok'), hover: c('ok-h'), soft: c('ok-s'), ink: c('ok-i') },
+          bad: { soft: c('bad-s'), ink: c('bad-i') },
+          warn: { soft: c('warn-s'), ink: c('warn-i') },
+          haz: { soft: c('haz-s'), ink: c('haz-i') },
+        },
+        boxShadow: {
+          card: '0 10px 30px -12px rgb(44 31 20 / .16), 0 2px 6px rgb(44 31 20 / .04)',
+          soft: '0 1px 2px rgb(44 31 20 / .06)',
+          dock: '0 -8px 30px rgb(44 31 20 / .10)',
+        },
+        keyframes: {
+          rise: { from: { opacity: 0, transform: 'translateY(10px)' }, to: { opacity: 1, transform: 'none' } },
+          float: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
+        },
+        animation: { rise: 'rise .35s ease both', float: 'float 9s ease-in-out infinite' },
+      } }
+    };
+  </script>
 
-<style>
-  #installAppBtn{
-    position:fixed;
-    right:16px;
-    bottom:18px;
-    z-index:999;
-    border:0;
-    border-radius:999px;
-    padding:12px 16px;
-    background:#0f172a;
-    color:#fff;
-    font-weight:800;
-    box-shadow:0 10px 30px rgba(15,23,42,.24);
-    display:none;
-    cursor:pointer;
-  }
-  #installAppBtn.show{display:block}
-  @media(max-width:760px){
-    #installAppBtn{right:12px;bottom:12px;padding:11px 14px;font-size:13px}
-  }
-</style>
+  <style type="text/tailwindcss">
+    /* Tema Warm UI */
+    :root{
+      --bg:253 246 238; --surface:255 255 255; --sunken:245 236 224;
+      --ink:44 31 20; --muted:107 79 58; --line:232 216 200; --line2:203 180 160;
+      --brand:200 97 42; --brand-h:170 82 36; --brand-s:248 236 229; --brand-i:156 76 33;
+      --sand:168 137 110; --sand-s:252 238 222; --sand-i:107 79 58;
+      --ok:45 138 94; --ok-h:38 117 80; --ok-s:230 241 236; --ok-i:35 108 73;
+      --bad-s:247 231 230; --bad-i:150 44 34; --warn-s:246 239 226; --warn-i:144 96 8; --haz-s:239 234 246; --haz-i:97 60 144;
+    }
+    @media (prefers-color-scheme:dark){
+      :root{
+        --bg:30 30 30; --surface:45 45 48; --sunken:37 37 38;
+      --ink:225 225 225; --muted:170 170 170; --line:62 62 66; --line2:89 78 75;
+      --brand:0 122 204; --brand-h:46 146 213; --brand-s:38 57 73; --brand-i:115 182 227;
+      --sand:122 98 85; --sand-s:52 40 32; --sand-i:170 170 170;
+      --ok:94 201 138; --ok-h:123 211 159; --ok-s:53 70 62; --ok-i:166 225 191;
+      --bad-s:76 55 57; --bad-i:247 174 174; --warn-s:77 70 51; --warn-i:250 225 151; --haz-s:69 63 79; --haz-i:223 203 247;
+      }
+    }
+    html{ -webkit-text-size-adjust:100%; scroll-padding-top:5rem }
 
-<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+    @layer base{
+      body{ @apply bg-bg font-sans text-[15px] leading-relaxed text-ink antialiased max-sm:text-[14.5px] }
+      label{ @apply mb-1.5 mt-4 block text-[13px] font-semibold }
+      input, select, textarea{
+        @apply min-h-[48px] w-full rounded-2xl border border-line bg-sunken px-4 py-2.5 text-[15px] text-ink outline-none transition
+               placeholder:text-muted/60 hover:border-line-strong focus:border-brand focus:bg-surface focus:ring-4 focus:ring-brand/20;
+      }
+      select{
+        @apply appearance-none pr-10;
+        background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23697a7c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+        background-repeat:no-repeat; background-position:right 16px center;
+      }
+      textarea{ @apply min-h-[100px] resize-y }
+      input[type=file]{ @apply cursor-pointer p-2 file:mr-3 file:cursor-pointer file:rounded-xl file:border-0 file:bg-brand-soft file:px-3.5 file:py-2 file:text-[13px] file:font-semibold file:text-brand-ink }
+      h2{ @apply text-xl font-extrabold tracking-tight sm:text-2xl }
+      h3{ @apply text-base font-bold }
+    }
+
+    @layer components{
+      .muted{ @apply text-[13px] text-muted }
+      .card{ @apply rounded-3xl border border-line bg-surface p-5 shadow-card sm:p-7 }
+      .section{ @apply hidden }
+      .section.active{ @apply block animate-rise }
+
+      /* Navigasi desktop */
+      .tab{ @apply inline-flex items-center gap-2 whitespace-nowrap rounded-full px-5 py-2.5 text-sm font-semibold text-muted transition hover:bg-sunken hover:text-ink focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/20 }
+      .tab.active{ @apply bg-brand text-white shadow-md shadow-brand/25 hover:bg-brand hover:text-white }
+      /* Navigasi mobile (dock bawah) */
+      .dock-btn{ @apply flex flex-1 flex-col items-center gap-1 py-1.5 text-[11px] font-semibold text-muted transition focus-visible:outline-none }
+      .dock-btn .pill{ @apply grid h-8 w-14 place-items-center rounded-full transition }
+      .dock-btn.active{ @apply text-brand-ink }
+      .dock-btn.active .pill{ @apply bg-brand-soft }
+
+      .btn{ @apply inline-flex min-h-[46px] items-center justify-center gap-2 rounded-2xl border border-transparent px-5 py-2.5 text-sm font-bold transition active:scale-[.98] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/25 }
+      .btn-primary{ @apply bg-brand text-white shadow-md shadow-brand/20 hover:bg-brand-hover }
+      .btn-success{ @apply bg-ok text-white shadow-md shadow-ok/20 hover:bg-ok-hover }
+      .btn-secondary{ @apply border-line-strong bg-surface text-ink hover:bg-sunken }
+      .btn-sm{ @apply min-h-[40px] rounded-xl px-4 text-[13px] }
+      .actions{ @apply mt-6 flex flex-wrap gap-2.5 }
+      .actions > .btn{ @apply max-sm:flex-1 }
+
+      .badge{ @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1 text-xs font-bold before:size-1.5 before:rounded-full before:bg-current before:content-[''] }
+      .open,.aging-bad{ @apply bg-bad-soft text-bad-ink }
+      .closed,.aging-good{ @apply bg-ok-soft text-ok-ink }
+      .damage,.aging-warn{ @apply bg-warn-soft text-warn-ink }
+      .hazard{ @apply bg-haz-soft text-haz-ink }
+
+      .notice{ @apply mt-4 rounded-2xl px-4 py-3 text-sm font-semibold }
+      .notice.ok{ @apply bg-ok-soft text-ok-ink }
+      .notice.err{ @apply bg-bad-soft text-bad-ink }
+      .ticket-box{ @apply mt-4 rounded-3xl border-2 border-dashed border-brand/60 bg-brand-soft p-6 text-center }
+      .ticket-label{ @apply mb-1.5 text-xs font-bold uppercase tracking-widest text-muted }
+      .ticket-number{ @apply mb-4 break-words text-2xl font-extrabold tracking-wide text-brand-ink sm:text-3xl }
+
+      .sec-title{ @apply mb-1 mt-7 flex items-center gap-3 text-sm font-extrabold first:mt-5 }
+      .sec-title i{ @apply grid size-7 flex-none place-items-center rounded-full bg-brand-soft text-xs font-extrabold not-italic text-brand-ink }
+      .drop{ @apply !mt-0 flex cursor-pointer flex-col items-center gap-1.5 rounded-3xl border-2 border-dashed border-line-strong bg-sunken px-4 py-7 text-center transition hover:border-brand hover:bg-brand-soft/60 peer-focus-visible:ring-4 peer-focus-visible:ring-brand/25 }
+
+      #adminReports{ @apply grid gap-4 [grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr))] }
+      #adminReports > .empty{ @apply col-span-full }
+      #ticketResult{ @apply grid max-w-2xl gap-4 }
+      .report{ @apply flex flex-col rounded-3xl border border-line bg-surface p-5 shadow-soft transition hover:shadow-card }
+      .report-head{ @apply mb-3 flex flex-wrap items-start justify-between gap-2.5 }
+      .tags{ @apply flex flex-wrap gap-1.5 }
+      .report-title{ @apply break-all font-extrabold tracking-wide }
+      .meta{ @apply text-[13.5px] leading-7 text-muted }
+      .meta strong{ @apply font-semibold text-ink }
+      .photo{ @apply mt-3 block aspect-[16/10] w-full rounded-2xl border border-line bg-sunken object-cover }
+      .divider{ @apply my-4 border-0 border-t border-line }
+      .admin-close{ @apply mt-auto pt-1 }
+      .empty{ @apply rounded-3xl border-2 border-dashed border-line-strong bg-sunken px-4 py-10 text-center text-muted }
+
+      .stat{ @apply relative flex items-center gap-4 overflow-hidden !p-5 }
+      .stat-ico{ @apply grid size-12 flex-none place-items-center rounded-2xl }
+      .stat-lbl{ @apply text-xs font-bold uppercase tracking-widest text-muted }
+      .stat-num{ @apply text-4xl font-extrabold leading-none tracking-tight }
+      .group-lbl{ @apply mb-1.5 block text-[11px] font-bold uppercase tracking-widest text-muted }
+
+      /* Tabel ringkasan: jadi kartu di layar kecil */
+      #summaryBody tr{ @apply transition hover:bg-sunken max-sm:mb-3 max-sm:block max-sm:rounded-2xl max-sm:border max-sm:border-line max-sm:bg-surface max-sm:px-4 max-sm:py-1.5 }
+      #summaryBody td{ @apply border-b border-line px-4 py-3 align-middle text-[13px] max-sm:flex max-sm:items-center max-sm:justify-between max-sm:gap-4 max-sm:border-dashed max-sm:px-0 max-sm:py-2 max-sm:text-right max-sm:last:border-b-0 }
+      #summaryBody td[data-label]{ @apply max-sm:before:text-[11px] max-sm:before:font-bold max-sm:before:uppercase max-sm:before:tracking-wide max-sm:before:text-muted max-sm:before:content-[attr(data-label)] }
+      #summaryBody tr:last-child td{ @apply border-b-0 }
+
+      .step{ @apply relative pb-5 pl-11 text-sm [counter-increment:s] last:pb-0 before:absolute before:left-0 before:top-[-2px] before:grid before:size-[30px] before:place-items-center before:rounded-full before:bg-brand-soft before:text-[13px] before:font-bold before:text-brand-ink before:content-[counter(s)] after:absolute after:bottom-0.5 after:left-[14px] after:top-[30px] after:w-0.5 after:bg-line last:after:hidden }
+      #installAppBtn{ @apply fixed bottom-[calc(96px+env(safe-area-inset-bottom))] right-4 z-50 hidden rounded-full bg-ink px-5 py-3 text-[13.5px] font-bold text-surface shadow-xl transition hover:opacity-90 md:bottom-6 }
+      #installAppBtn.show{ @apply block }
+    }
+    @media (prefers-reduced-motion:reduce){ *{ animation:none!important; transition:none!important } }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
 </head>
+
 <body>
-<header>
-  <div class="wrap">
-    <div class="brand"><span class="brand-track">TSP Messku</span></div>
-    <div class="sub">Pelaporan kerusakan dan potensi bahaya di area mess</div>
-    <div class="analog-clock">
-      <div id="hourHand" class="hand hour"></div>
-      <div id="minuteHand" class="hand minute"></div>
-      <div id="secondHand" class="hand second"></div>
+<!-- ================= HEADER ================= -->
+<header class="relative overflow-hidden border-b border-line bg-gradient-to-br from-brand-soft via-bg to-sand-soft/60 px-4 pb-7 pt-[calc(1.25rem+env(safe-area-inset-top))] sm:pb-9">
+  <div class="pointer-events-none absolute -right-20 -top-28 size-80 animate-float rounded-full bg-brand/15 blur-3xl"></div>
+  <div class="pointer-events-none absolute -bottom-28 left-1/4 size-72 animate-float rounded-full bg-sand/20 blur-3xl [animation-delay:-4s]"></div>
+
+  <div class="relative mx-auto max-w-6xl">
+    <div class="flex items-center justify-between gap-4">
+      <div class="flex min-w-0 items-center gap-3.5">
+        <div class="grid size-12 flex-none place-items-center rounded-2xl bg-brand text-white shadow-lg shadow-brand/30 sm:size-14" aria-hidden="true">
+          <svg class="size-6 sm:size-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>
+        </div>
+        <div class="min-w-0">
+          <div class="text-2xl font-extrabold leading-none tracking-tight sm:text-4xl">TSP Messku</div>
+          <div class="mt-1.5 text-[12.5px] text-muted sm:text-sm">Pelaporan kerusakan dan potensi bahaya di area mess</div>
+        </div>
+      </div>
+
+      <div class="flex flex-none items-baseline gap-1 rounded-2xl border border-line bg-surface px-3.5 py-2 font-sans tabular-nums shadow-card sm:px-4 sm:py-2.5" role="timer" aria-label="Jam digital">
+        <span class="text-2xl font-extrabold leading-none tracking-tight text-ink sm:text-[32px]"><span id="clkH">--</span><span class="mx-px text-brand animate-pulse">:</span><span id="clkM">--</span></span>
+        <span id="clkS" class="w-[2ch] text-xs font-bold text-sand sm:text-sm">--</span>
+      </div>
+    </div>
+
+    <div class="mt-6 sm:mt-8">
+      <p id="greeting" class="text-xl font-bold tracking-tight sm:text-3xl">Halo</p>
+      <p id="today" class="mt-0.5 text-[13px] text-muted sm:text-sm"></p>
     </div>
   </div>
 </header>
 
-<nav>
-  <div class="nav-inner">
-    <button class="nav-btn active" data-target="lapor">Buat Laporan</button>
-    <button class="nav-btn" data-target="cek">Cek Status</button>
-    <button class="nav-btn" data-target="admin">Admin</button>
+<!-- ================= NAV DESKTOP ================= -->
+<nav class="sticky top-0 z-30 hidden bg-bg/75 px-4 py-3 backdrop-blur-xl backdrop-saturate-150 md:block">
+  <div class="mx-auto flex max-w-6xl justify-center">
+    <div class="inline-flex gap-1 rounded-full border border-line bg-surface p-1.5 shadow-soft">
+      <button class="tab active" data-target="lapor">
+        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Buat Laporan</button>
+      <button class="tab" data-target="cek">
+        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>Cek Status</button>
+      <button class="tab" data-target="admin">
+        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Admin</button>
+    </div>
   </div>
 </nav>
 
-<main>
+<!-- ================= MAIN ================= -->
+<main class="mx-auto max-w-6xl px-4 pb-32 pt-6 md:pb-12">
+
+  <!-- ===== Buat Laporan ===== -->
   <section id="lapor" class="section active">
-    <div class="grid">
-      <div class="card col-8">
+    <div class="grid gap-5 lg:grid-cols-3">
+      <div class="card lg:col-span-2">
         <h2>Form Pelaporan</h2>
         <p class="muted">Semua data identitas dan foto wajib diisi agar laporan dapat diproses.</p>
 
         <form id="reportForm">
-          <label>Nama Penghuni *</label>
-          <input id="nama" required placeholder="Contoh: Andi Saputra">
+          <div class="sec-title"><i>1</i>Data Pelapor</div>
+          <label for="nama">Nama Penghuni *</label>
+          <input id="nama" required placeholder="Contoh: Andi Saputra" autocomplete="name">
 
-          <label>No. HP Pelapor *</label>
-          <input id="nohp" type="tel" required placeholder="Contoh: 081234567890">
+          <label for="nohp">No. HP Pelapor *</label>
+          <input id="nohp" type="tel" inputmode="tel" required placeholder="Contoh: 081234567890" autocomplete="tel">
 
-          <div class="grid">
-            <div class="col-6">
-              <label>Nama Facility *</label>
+          <div class="sec-title"><i>2</i>Detail Laporan</div>
+          <div class="grid gap-x-4 sm:grid-cols-2">
+            <div>
+              <label for="mess" class="!mt-3">Nama Facility *</label>
               <select id="mess" required>
                 <option value="">Pilih Facility</option>
                 <option value="Mess">Mess</option>
@@ -367,26 +239,33 @@
                 <option value="Lain Lain">Lain Lain</option>
               </select>
             </div>
-            <div class="col-6">
-              <label>No. Facility *</label>
-              <input id="kamar" required placeholder="Contoh: No. Kamar / Nomor Facility">
+            <div>
+              <label for="kamar" class="!mt-3">No. Facility *</label>
+              <input id="kamar" required placeholder="No. Kamar / Nomor Facility">
             </div>
           </div>
 
-          <label>Jenis Laporan *</label>
+          <label for="jenis">Jenis Laporan *</label>
           <select id="jenis" required>
             <option value="">Pilih jenis laporan</option>
             <option value="Kerusakan">Kerusakan</option>
             <option value="Potensi Bahaya">Potensi Bahaya</option>
           </select>
 
-          <label>Lokasi Kerusakan / Potensi Bahaya *</label>
+          <label for="lokasi">Lokasi Kerusakan / Potensi Bahaya *</label>
           <input id="lokasi" required placeholder="Contoh: Kamar mandi lantai 2">
 
-          <label>Foto Kondisi *</label>
-          <input id="foto" type="file" accept="image/*" required>
-          <p class="muted">Di HP, pengguna dapat memilih mengambil foto melalui kamera atau memilih foto yang sudah tersedia dari galeri.</p>
-
+          <div class="sec-title"><i>3</i>Foto Kondisi</div>
+          <div class="relative">
+            <input id="foto" type="file" accept="image/*" required class="peer sr-only !min-h-0">
+            <label for="foto" class="drop">
+              <span class="grid size-12 place-items-center rounded-2xl bg-brand-soft text-brand-ink">
+                <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              </span>
+              <span id="fileName" class="text-sm font-bold">Ketuk untuk ambil / pilih foto</span>
+              <span class="muted">Di HP, Anda dapat memakai kamera langsung atau memilih dari galeri.</span>
+            </label>
+          </div>
           <img id="previewFoto" class="photo hidden" alt="Preview foto laporan">
 
           <div class="actions">
@@ -397,113 +276,137 @@
         </form>
       </div>
 
-      <div class="card col-4">
-        <h3>Alur Laporan</h3>
-        <p><strong>1.</strong> Penghuni mengisi laporan dan mengunggah foto.</p>
-        <p><strong>2.</strong> Status laporan otomatis <span class="badge open">OPEN</span>.</p>
-        <p><strong>3.</strong> Admin melakukan penanganan.</p>
-        <p><strong>4.</strong> Admin mengunggah foto perbaikan.</p>
-        <p><strong>5.</strong> Status berubah menjadi <span class="badge closed">CLOSED</span>.</p>
-      </div>
+      <aside class="flex flex-col gap-5 self-start lg:sticky lg:top-24">
+        <div class="card">
+          <h3>Alur Laporan</h3>
+          <p class="muted">Dari laporan masuk sampai selesai ditangani.</p>
+          <ol class="mt-5 [counter-reset:s]">
+            <li class="step">Penghuni mengisi laporan dan mengunggah foto.</li>
+            <li class="step">Status laporan otomatis <span class="badge open">OPEN</span></li>
+            <li class="step">Admin melakukan penanganan.</li>
+            <li class="step">Admin mengunggah foto perbaikan.</li>
+            <li class="step">Status berubah menjadi <span class="badge closed">CLOSED</span></li>
+          </ol>
+        </div>
+        <div class="rounded-3xl border border-sand/30 bg-sand-soft p-5 text-sand-ink">
+          <h3 class="mb-2">Tips foto yang baik</h3>
+          <ul class="list-disc space-y-1 pl-5 text-[13.5px]">
+            <li>Pastikan pencahayaan cukup dan gambar tidak buram.</li>
+            <li>Ambil dari jarak dekat dan satu foto dari jarak jauh.</li>
+            <li>Tunjukkan area di sekitar agar lokasi mudah dikenali.</li>
+          </ul>
+        </div>
+      </aside>
     </div>
   </section>
 
+  <!-- ===== Cek Status ===== -->
   <section id="cek" class="section">
     <div class="card">
       <h2>Cek Status Laporan</h2>
-      <div class="toolbar">
-        <input id="ticketSearch" placeholder="Masukkan nomor tiket">
-        <button class="btn btn-primary" onclick="searchTicket()">Cari</button>
+      <p class="muted">Masukkan nomor tiket yang Anda terima setelah mengirim laporan.</p>
+      <div class="my-5 flex flex-col gap-2.5 sm:flex-row">
+        <input id="ticketSearch" class="sm:flex-1" placeholder="Contoh: MS-20261028-1234" autocomplete="off">
+        <button class="btn btn-primary max-sm:w-full" onclick="searchTicket()">Cari Tiket</button>
       </div>
       <div id="ticketResult"></div>
     </div>
   </section>
 
+  <!-- ===== Admin ===== -->
   <section id="admin" class="section">
-    <div id="adminLogin" class="card login-box">
-      <h2>Login Admin</h2>
-      <label>Username</label>
-      <input id="adminUser" placeholder="admin">
-      <label>Password</label>
-      <input id="adminPass" type="password" placeholder="Password admin">
-      <div class="actions">
-        <button class="btn btn-primary" onclick="loginAdmin()">Login</button>
+    <div id="adminLogin" class="card mx-auto mt-2 max-w-md">
+      <div class="mb-3 grid size-12 place-items-center rounded-2xl bg-brand-soft text-brand-ink">
+        <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
       </div>
+      <h2>Login Admin</h2>
+      <p class="muted">Masuk untuk mengelola laporan facility.</p>
+      <label for="adminUser">Username</label>
+      <input id="adminUser" placeholder="admin" autocomplete="username">
+      <label for="adminPass">Password</label>
+      <input id="adminPass" type="password" placeholder="Password admin" autocomplete="current-password">
+      <div class="actions"><button class="btn btn-primary w-full" onclick="loginAdmin()">Login</button></div>
       <div id="loginNotice"></div>
-      <p class="muted">Default: admin / Admin123</p>
+      <p class="muted mt-4 text-center">Default: admin / Admin123</p>
     </div>
 
     <div id="adminPanel" class="hidden">
-      <div class="grid">
-        <div class="card col-4 stat">
-          <div class="muted">Total Laporan</div>
-          <div id="statTotal" class="num">0</div>
+      <div class="grid gap-4 sm:grid-cols-3">
+        <div class="card stat">
+          <div class="stat-ico bg-brand-soft text-brand-ink">
+            <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <div><div class="stat-lbl">Total Laporan</div><div id="statTotal" class="stat-num">0</div></div>
         </div>
-        <div class="card col-4 stat">
-          <div class="muted">OPEN</div>
-          <div id="statOpen" class="num">0</div>
+        <div class="card stat">
+          <div class="stat-ico bg-bad-soft text-bad-ink">
+            <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          </div>
+          <div><div class="stat-lbl">Open</div><div id="statOpen" class="stat-num text-bad-ink">0</div></div>
         </div>
-        <div class="card col-4 stat">
-          <div class="muted">CLOSED</div>
-          <div id="statClosed" class="num">0</div>
+        <div class="card stat">
+          <div class="stat-ico bg-ok-soft text-ok-ink">
+            <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <div><div class="stat-lbl">Closed</div><div id="statClosed" class="stat-num text-ok-ink">0</div></div>
         </div>
       </div>
 
-      <div class="card" style="margin-top:16px">
-        <div class="report-head">
-          <div>
-            <h2 style="margin-bottom:5px">Summary Status & Aging</h2>
-            <div class="muted">Ringkasan seluruh laporan OPEN dan CLOSED beserta umur penanganannya.</div>
-          </div>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>No. Tiket</th>
-                <th>Nama</th>
-                <th>No. HP</th>
-                <th>Facility / No. Facility</th>
-                <th>Jenis</th>
-                <th>Status</th>
-                <th>Tanggal Lapor</th>
-                <th>Tanggal Close</th>
-                <th>Aging</th>
+      <div class="card mt-5">
+        <h2>Summary Status &amp; Aging</h2>
+        <div class="muted">Ringkasan seluruh laporan OPEN dan CLOSED beserta umur penanganannya.</div>
+        <div class="mt-5 w-full overflow-x-auto rounded-2xl border border-line max-sm:overflow-visible max-sm:border-0">
+          <table class="w-full min-w-[900px] border-collapse bg-surface text-left max-sm:block max-sm:min-w-0 max-sm:bg-transparent">
+            <thead class="max-sm:hidden">
+              <tr class="bg-sunken text-[11.5px] font-bold uppercase tracking-wider text-muted [&>th]:border-b [&>th]:border-line [&>th]:px-4 [&>th]:py-3">
+                <th>No. Tiket</th><th>Nama</th><th>No. HP</th><th>Facility / No.</th><th>Jenis</th>
+                <th>Status</th><th>Tanggal Lapor</th><th>Tanggal Close</th><th>Aging</th>
               </tr>
             </thead>
-            <tbody id="summaryBody"></tbody>
+            <tbody id="summaryBody" class="max-sm:block"></tbody>
           </table>
         </div>
       </div>
 
-      <div class="card" style="margin-top:16px">
-        <div class="report-head">
+      <div class="card mt-5">
+        <h2>Dashboard Admin</h2>
+        <div class="muted">Kelola laporan facility</div>
+
+        <div class="mt-5 grid gap-4 rounded-2xl bg-sunken p-4 sm:grid-cols-3">
           <div>
-            <h2 style="margin-bottom:5px">Dashboard Admin</h2>
-            <div class="muted">Kelola laporan facility</div>
+            <span class="group-lbl">Laporan</span>
+            <div class="flex flex-wrap gap-2">
+              <button class="btn btn-success btn-sm" onclick="downloadExcel()">Excel</button>
+              <button class="btn btn-primary btn-sm" onclick="downloadPDF()">PDF</button>
+            </div>
           </div>
-          <div class="actions">
-            <button class="btn btn-success" onclick="downloadExcel()">Download Excel</button>
-            <button class="btn btn-primary" onclick="downloadPDF()">Download PDF</button>
-            <button class="btn btn-secondary" onclick="exportDatabase()">Export Database</button>
-            <button class="btn btn-secondary" onclick="document.getElementById('importDatabaseFile').click()">Import Database</button>
-            <input id="importDatabaseFile" type="file" accept="application/json" style="display:none" onchange="importDatabase(event)">
-            <button class="btn btn-secondary" onclick="showChangePassword()">Ubah Password Admin</button>
-            <button class="btn btn-secondary" onclick="logoutAdmin()">Logout</button>
+          <div>
+            <span class="group-lbl">Database</span>
+            <div class="flex flex-wrap gap-2">
+              <button class="btn btn-secondary btn-sm" onclick="exportDatabase()">Export</button>
+              <button class="btn btn-secondary btn-sm" onclick="document.getElementById('importDatabaseFile').click()">Import</button>
+              <input id="importDatabaseFile" type="file" accept="application/json" class="hidden" onchange="importDatabase(event)">
+            </div>
+          </div>
+          <div>
+            <span class="group-lbl">Akun</span>
+            <div class="flex flex-wrap gap-2">
+              <button class="btn btn-secondary btn-sm" onclick="showChangePassword()">Ubah Password</button>
+              <button class="btn btn-secondary btn-sm" onclick="logoutAdmin()">Logout</button>
+            </div>
           </div>
         </div>
 
-        <div id="changePasswordBox" class="card hidden" style="margin-top:16px">
+        <div id="changePasswordBox" class="mt-4 hidden rounded-3xl border border-line bg-sunken p-5">
           <h3>Ubah Password Admin</h3>
-          <label>Password Lama</label>
-          <input id="oldAdminPass" type="password" placeholder="Masukkan password lama">
-
-          <label>Password Baru</label>
-          <input id="newAdminPass" type="password" placeholder="Masukkan password baru">
-
-          <label>Konfirmasi Password Baru</label>
-          <input id="confirmAdminPass" type="password" placeholder="Ulangi password baru">
-
+          <div class="grid gap-x-4 md:grid-cols-3">
+            <div><label for="oldAdminPass">Password Lama</label>
+              <input id="oldAdminPass" type="password" placeholder="Masukkan password lama" autocomplete="current-password"></div>
+            <div><label for="newAdminPass">Password Baru</label>
+              <input id="newAdminPass" type="password" placeholder="Masukkan password baru" autocomplete="new-password"></div>
+            <div><label for="confirmAdminPass">Konfirmasi Password Baru</label>
+              <input id="confirmAdminPass" type="password" placeholder="Ulangi password baru" autocomplete="new-password"></div>
+          </div>
           <div class="actions">
             <button class="btn btn-primary" onclick="changeAdminPassword()">Simpan Password</button>
             <button class="btn btn-secondary" onclick="hideChangePassword()">Batal</button>
@@ -511,13 +414,13 @@
           <div id="passwordNotice"></div>
         </div>
 
-        <div class="toolbar">
-          <select id="filterStatus" onchange="renderAdmin()">
+        <div class="my-5 flex flex-col gap-2.5 sm:flex-row">
+          <select id="filterStatus" class="sm:w-52" onchange="renderAdmin()">
             <option value="ALL">Semua Status</option>
             <option value="OPEN">OPEN</option>
             <option value="CLOSED">CLOSED</option>
           </select>
-          <input id="adminSearch" placeholder="Cari nama, facility, no facility, tiket" oninput="renderAdmin()">
+          <input id="adminSearch" class="sm:flex-1" placeholder="Cari nama, facility, no facility, tiket" oninput="renderAdmin()">
         </div>
 
         <div id="adminReports"></div>
@@ -526,14 +429,25 @@
   </section>
 </main>
 
+<!-- ================= DOCK MOBILE ================= -->
+<nav class="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/90 px-3 pb-[calc(0.5rem+env(safe-area-inset-bottom))] pt-2 shadow-dock backdrop-blur-xl md:hidden">
+  <div class="mx-auto flex max-w-md">
+    <button class="dock-btn active" data-target="lapor">
+      <span class="pill"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></span>Lapor</button>
+    <button class="dock-btn" data-target="cek">
+      <span class="pill"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span>Status</button>
+    <button class="dock-btn" data-target="admin">
+      <span class="pill"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>Admin</button>
+  </div>
+</nav>
 
 <button id="installAppBtn" type="button">Pasang TSP Messku</button>
-<footer>TSP Messku • Aplikasi HTML Mandiri • Data disimpan pada browser perangkat</footer>
+<footer class="hidden px-4 pb-8 text-center text-xs text-muted md:block">TSP Messku • Aplikasi HTML Mandiri • Data disimpan pada browser perangkat</footer>
 
 <script>
   const STORAGE_KEY = 'messSafeReportsV1';
   const ADMIN_USER = 'admin';
-  const DEFAULT_ADMIN_PASS = 'GATSP1122';
+  const DEFAULT_ADMIN_PASS = 'Admin123';
   const ADMIN_PASS_KEY = 'messAdminPassword';
 
   function getAdminPassword(){
@@ -611,28 +525,33 @@
     });
   }
 
-  document.querySelectorAll('.nav-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-      document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById(btn.dataset.target).classList.add('active');
-      if(btn.dataset.target === 'admin' && sessionStorage.getItem('messAdmin') === '1'){
-        showAdmin();
-      }
-    });
+  /* ===== Navigasi (desktop tab + dock mobile tersinkron) ===== */
+  function goTo(target){
+    document.querySelectorAll('[data-target]').forEach(b=>b.classList.toggle('active', b.dataset.target===target));
+    document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active', s.id===target));
+    window.scrollTo({top:0,behavior:'smooth'});
+    if(target==='admin' && sessionStorage.getItem('messAdmin')==='1') showAdmin();
+  }
+  document.querySelectorAll('[data-target]').forEach(btn=>{
+    btn.addEventListener('click', ()=>goTo(btn.dataset.target));
   });
 
+  const DEFAULT_DROP_TEXT = 'Ketuk untuk ambil / pilih foto';
   document.getElementById('foto').addEventListener('change', async e=>{
     const f = e.target.files[0];
     const p = document.getElementById('previewFoto');
-    if(!f){ p.classList.add('hidden'); return; }
+    const nameEl = document.getElementById('fileName');
+    if(!f){ p.classList.add('hidden'); nameEl.textContent = DEFAULT_DROP_TEXT; return; }
+    nameEl.textContent = f.name;
     p.src = await fileToBase64(f);
     p.classList.remove('hidden');
   });
 
   document.getElementById('reportForm').addEventListener('reset', ()=>{
-    setTimeout(()=>document.getElementById('previewFoto').classList.add('hidden'),0);
+    setTimeout(()=>{
+      document.getElementById('previewFoto').classList.add('hidden');
+      document.getElementById('fileName').textContent = DEFAULT_DROP_TEXT;
+    },0);
   });
 
   document.getElementById('reportForm').addEventListener('submit', async e=>{
@@ -650,7 +569,8 @@
         mess: document.getElementById('mess').value.trim(),
         kamar: document.getElementById('kamar').value.trim(),
         jenis: document.getElementById('jenis').value,
-        lokasi: document.getElementById('lokasi').value.trim(),        foto,
+        lokasi: document.getElementById('lokasi').value.trim(),
+        foto,
         status:'OPEN',
         createdAt:new Date().toISOString(),
         closedAt:null,
@@ -668,10 +588,11 @@
           <div class="ticket-label">Nomor Tiket Laporan Anda</div>
           <div class="ticket-number">${laporan.ticket}</div>
           <button type="button" id="copyTicketBtn" class="btn btn-primary" onclick="copyTicket('${laporan.ticket}')">Copy Nomor Tiket</button>
-          <div class="muted" style="margin-top:10px">Simpan nomor tiket ini untuk mengecek status laporan.</div>
+          <div class="muted mt-3">Simpan nomor tiket ini untuk mengecek status laporan.</div>
         </div>`;
       e.target.reset();
       document.getElementById('previewFoto').classList.add('hidden');
+      document.getElementById('fileName').textContent = DEFAULT_DROP_TEXT;
     }catch(err){
       document.getElementById('reportNotice').innerHTML =
         `<div class="notice err">Foto terlalu besar atau penyimpanan browser penuh. Coba gunakan foto dengan ukuran lebih kecil.</div>`;
@@ -706,35 +627,36 @@
     if(!body) return;
 
     if(!reports.length){
-      body.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#6b7280">Belum ada laporan.</td></tr>';
+      body.innerHTML = '<tr><td colspan="9" class="!justify-center py-8 text-center text-muted">Belum ada laporan.</td></tr>';
       return;
     }
 
     body.innerHTML = reports.map(r => `
       <tr>
-        <td><strong>${escapeHtml(r.ticket)}</strong></td>
-        <td>${escapeHtml(r.nama)}</td>
-        <td>${escapeHtml(r.nohp || '-')}</td>
-        <td>${escapeHtml(r.mess)} / ${escapeHtml(r.kamar)}</td>
-        <td>${escapeHtml(r.jenis)}</td>
-        <td><span class="badge ${r.status==='OPEN'?'open':'closed'}">${r.status}</span></td>
-        <td>${formatDate(r.createdAt)}</td>
-        <td>${r.closedAt ? formatDate(r.closedAt) : '-'}</td>
-        <td><span class="badge ${agingClass(r)}">${agingText(r)}</span></td>
+        <td data-label="No. Tiket"><strong>${escapeHtml(r.ticket)}</strong></td>
+        <td data-label="Nama">${escapeHtml(r.nama)}</td>
+        <td data-label="No. HP">${escapeHtml(r.nohp || '-')}</td>
+        <td data-label="Facility">${escapeHtml(r.mess)} / ${escapeHtml(r.kamar)}</td>
+        <td data-label="Jenis">${escapeHtml(r.jenis)}</td>
+        <td data-label="Status"><span class="badge ${r.status==='OPEN'?'open':'closed'}">${r.status}</span></td>
+        <td data-label="Tgl Lapor">${formatDate(r.createdAt)}</td>
+        <td data-label="Tgl Close">${r.closedAt ? formatDate(r.closedAt) : '-'}</td>
+        <td data-label="Aging"><span class="badge ${agingClass(r)}">${agingText(r)}</span></td>
       </tr>
     `).join('');
   }
 
   function reportCard(r, admin=false){
     const jenisClass = r.jenis === 'Kerusakan' ? 'damage' : 'hazard';
+    const accent = r.status==='OPEN' ? 'border-l-bad-ink/50' : 'border-l-ok-ink/50';
     return `
-      <div class="report">
+      <div class="report border-l-4 ${accent}">
         <div class="report-head">
           <div>
             <div class="report-title">${escapeHtml(r.ticket)}</div>
             <div class="meta">${formatDate(r.createdAt)}</div>
           </div>
-          <div>
+          <div class="tags">
             <span class="badge ${jenisClass}">${escapeHtml(r.jenis)}</span>
             <span class="badge ${r.status==='OPEN'?'open':'closed'}">${r.status}</span>
           </div>
@@ -746,21 +668,23 @@
           <strong>No. Facility:</strong> ${escapeHtml(r.kamar)}<br>
           <strong>Lokasi:</strong> ${escapeHtml(r.lokasi)}<br>
           <strong>Aging:</strong> ${agingText(r)}
-        </div>        <img class="photo" src="${r.foto}" alt="Foto laporan">
+        </div>
+        <img class="photo" src="${r.foto}" alt="Foto laporan">
         ${r.status==='CLOSED' ? `
-          <hr style="border:0;border-top:1px solid #e5e7eb;margin:16px 0">
+          <hr class="divider">
           <div class="meta"><strong>Ditutup:</strong> ${formatDate(r.closedAt)}</div>
-          <p><strong>Catatan Perbaikan:</strong><br>${escapeHtml(r.repairNote || '-')}</p>
+          <p class="mt-1.5 text-sm"><strong>Catatan Perbaikan:</strong><br><span class="meta">${escapeHtml(r.repairNote || '-')}</span></p>
           ${r.repairPhoto ? `<img class="photo" src="${r.repairPhoto}" alt="Foto perbaikan">` : ''}
         ` : ''}
         ${admin && r.status==='OPEN' ? `
-          <div style="margin-top:16px;padding-top:14px;border-top:1px solid #e5e7eb">
-            <label>Catatan Perbaikan</label>
+          <div class="admin-close">
+            <hr class="divider">
+            <label class="!mt-0">Catatan Perbaikan</label>
             <textarea id="note-${r.id}" placeholder="Contoh: Keran telah diganti dan area sudah aman."></textarea>
             <label>Foto Hasil Perbaikan *</label>
             <input type="file" id="repair-${r.id}" accept="image/*">
             <div class="actions">
-              <button class="btn btn-success" onclick="closeReport('${r.id}')">Close Laporan</button>
+              <button class="btn btn-success w-full" onclick="closeReport('${r.id}')">Close Laporan</button>
             </div>
           </div>
         ` : ''}
@@ -792,12 +716,13 @@
     const q = document.getElementById('ticketSearch').value.trim().toLowerCase();
     const box = document.getElementById('ticketResult');
     if(!q){
-      box.innerHTML = '<div class="notice err">Masukkan nomor tiket terlebih dahulu.</div>';
+      box.innerHTML = '<div class="notice err !mt-0">Masukkan nomor tiket terlebih dahulu.</div>';
       return;
     }
     const r = getReports().find(x=>x.ticket.toLowerCase()===q);
     box.innerHTML = r ? reportCard(r,false) : '<div class="empty">Nomor tiket tidak ditemukan.</div>';
   }
+  document.getElementById('ticketSearch').addEventListener('keydown', e=>{ if(e.key==='Enter') searchTicket(); });
 
   function loginAdmin(){
     const u = document.getElementById('adminUser').value;
@@ -811,6 +736,7 @@
         '<div class="notice err">Username atau password salah.</div>';
     }
   }
+  document.getElementById('adminPass').addEventListener('keydown', e=>{ if(e.key==='Enter') loginAdmin(); });
 
   function showAdmin(){
     document.getElementById('adminLogin').classList.add('hidden');
@@ -982,22 +908,26 @@
     });
   }
 
-
   function updateClock(){
     const now = new Date();
-    const sec = now.getSeconds();
-    const min = now.getMinutes();
-    const hour = now.getHours()%12;
-    const secDeg = sec * 6;
-    const minDeg = min * 6 + sec * 0.1;
-    const hourDeg = hour * 30 + min * 0.5;
-    document.getElementById('secondHand').style.transform = `rotate(${secDeg}deg)`;
-    document.getElementById('minuteHand').style.transform = `rotate(${minDeg}deg)`;
-    document.getElementById('hourHand').style.transform = `rotate(${hourDeg}deg)`;
+    const p = n => String(n).padStart(2,'0');
+    document.getElementById('clkH').textContent = p(now.getHours());
+    document.getElementById('clkM').textContent = p(now.getMinutes());
+    document.getElementById('clkS').textContent = p(now.getSeconds());
   }
-  updateClock();
-  setInterval(updateClock,1000);
 
+  function updateGreeting(){
+    const now = new Date();
+    const h = now.getHours();
+    const sapa = h < 11 ? 'Selamat pagi' : h < 15 ? 'Selamat siang' : h < 18 ? 'Selamat sore' : 'Selamat malam';
+    document.getElementById('greeting').textContent = sapa + ', ada yang perlu dilaporkan?';
+    document.getElementById('today').textContent =
+      now.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  }
+
+  updateClock(); updateGreeting();
+  setInterval(updateClock,1000);
+  setInterval(updateGreeting,60000);
 </script>
 
 </body>
